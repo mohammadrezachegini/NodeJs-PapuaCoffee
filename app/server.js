@@ -4,12 +4,12 @@ const path = require('path');
 const morgan = require('morgan');
 const createError = require('http-errors');
 const swaggerUI = require('swagger-ui-express');
-const swaggerJSDoc = require('swagger-jsdo');
+const swaggerJSDoc = require('swagger-jsdoc');
 const cors = require('cors');
 const {AllRoutes} = require('../app/routers/router')
 
 
-module,exports = class Application {
+module.exports = class Application {
 
     #app = express();
     #DB_URI;
@@ -32,7 +32,7 @@ module,exports = class Application {
         this.#app.use(express.json());
         this.#app.use(express.urlencoded({extended: true}))
         this.#app.use(express.static(path.join(__dirname, "..", "public")));
-        this.#app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerJsDoc({
+        this.#app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerJSDoc({
             swaggerDefinition: {
                 info: {
                     title: "Papua Coffee",
@@ -57,8 +57,8 @@ module,exports = class Application {
     }
 
     createServer(){
-        const httpp = require('http');
-        httpp.createServer(this.#app).listen(this.#PORT, () => {
+        const http = require('http');
+        http.createServer(this.#app).listen(this.#PORT, () => {
             console.log(`Server is running on port ${this.#PORT}`);
         })
     }
@@ -110,8 +110,7 @@ module,exports = class Application {
             })
         })
     }
-    }
-
+    
 
 
 }
