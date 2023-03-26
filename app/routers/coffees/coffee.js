@@ -5,11 +5,178 @@ const fileupload = require("express-fileupload");
 const {mongoIDValidator} = require("../../http/validations/public")
 
 
+
+
+
+
+/**  
+ * @swagger
+ * tags: 
+ *  name: Coffees
+ *  description : User authentication section
+ *      
+*/
+
+/**
+ * @swagger
+ *  /coffee/create:
+ *      post:
+ *          summary: register user
+ *          tags: [Coffees] 
+ *          description :  register user
+ *          parameters:
+ *          -   name: product_name
+ *              description: First Name
+ *              in: formData
+ *              required: true
+ *              type: string  
+ *          -   name: description
+ *              description: description
+ *              in: formData
+ *              required: true
+ *              type: string  
+ *          -   name: price
+ *              description: price
+ *              in: formData
+ *              required: true
+ *              type: string  
+ *          -   name: image
+ *              description: Password
+ *              in: formData
+ *              required: true
+ *              type: file         
+ *          responses:
+ *              201:
+ *                  description : success
+ *              400:
+ *                  description: Bad Request
+ *              401:
+ *                  description: Unauthorization
+ *              500:
+ *                  description: internal Server Error
+*/
+
 router.post("/create", fileupload(),uploadFile, CoffeeController.createCoffee)
 router.get("/list", CoffeeController.getAllCoffee)
 router.get("/:id", mongoIDValidator(), CoffeeController.getCoffeeById)
 router.delete("/remove/:id", mongoIDValidator(), CoffeeController.removeCoffee)
+
+
+/**  
+ * @swagger
+ * tags: 
+ *  name: Coffees
+ *  description : User authentication section
+ *      
+*/
+
+// /**
+//  * @swagger
+//  *  /coffee/edit/:id:
+//  *      put:
+//  *          summary: update user
+//  *          tags: [Coffees] 
+//  *          description :  register user
+//  *          parameters:
+//  *          -   name: product_name
+//  *              description: First Name
+//  *              in: formData
+//  *              required: true
+//  *              type: string  
+//  *          -   name: description
+//  *              description: description
+//  *              in: formData
+//  *              required: true
+//  *              type: string  
+//  *          -   name: price
+//  *              description: price
+//  *              in: formData
+//  *              required: true
+//  *              type: string  
+//  *          -   name: image
+//  *              description: image
+//  *              in: formData
+//  *              required: true
+//  *              type: file         
+//  *          responses:
+//  *              201:
+//  *                  description : success
+//  *              400:
+//  *                  description: Bad Request
+//  *              401:
+//  *                  description: Unauthorization
+//  *              500:
+//  *                  description: internal Server Error
+// */
+
+
+/**
+ * @swagger
+ * /coffee/edit/{id}:
+ *   put:
+ *     summary: Update a user by ID
+ *     description: Update a user's name and email address by their ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the user to update.
+ *         schema:
+ *           type: string
+ *       - in: body
+ *         name: coffee
+ *         description: The updated user object.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             product_name:
+ *               type: string
+ *             price:
+ *               type: string
+ *     responses:
+ *       '200':
+ *         description: OK
+ *       '404':
+ *         description: Not Found
+ *       '500':
+ *         description: Internal Server Error
+ */
 router.put("/edit/:id", CoffeeController.updateCoffee)
+
+
+/**
+ * @swagger
+ * /coffee/edit-coffeeImage/{id}:
+ *   patch:
+ *     summary: Update a user by ID
+ *     description: Update a user's name and email address by their ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the user to update.
+ *         schema:
+ *           type: string
+ *       - in: body
+ *         name: coffee
+ *         description: The updated user object.
+ *         required: true
+ *         schema:
+ *           type: file
+ *           properties:
+ *             image:
+ *               in: formData
+ *               type: file
+ * 
+ *     responses:
+ *       '200':
+ *         description: OK
+ *       '404':
+ *         description: Not Found
+ *       '500':
+ *         description: Internal Server Error
+ */
 router.patch("/edit-coffeeImage/:id", fileupload(),uploadFile , mongoIDValidator(), CoffeeController.updateCoffeeImage)
 
 
