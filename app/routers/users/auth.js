@@ -106,7 +106,7 @@ router.post("/login",authController.login)
  *             
 */
 
-router.post("/refresh-token",authController.refreshToken)
+// router.post("/refresh-token",authController.refreshToken)
 
 module.exports = {
     userAuthRoutes: router

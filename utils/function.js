@@ -6,6 +6,8 @@ const { reject } = require("bcrypt/promises")
 const { UserModel } = require("../app/models/user")
 const { SECRET_KEY, ACCESS_TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY } = require("./constants")
 const redisClient = require("./init_redis")
+const path = require("path")
+const fs = require("fs")
 
 function HashString(str){
 
@@ -94,6 +96,21 @@ function VerifyRefreshToken(token){
 }
 
 
+function createUploadPath(){
+    let d = new Date();
+    const year = "" + d.getFullYear();
+    const month = d.getMonth() + "";
+    const day = "" + d.getDay();
+    const uploadPath = path.join(__dirname, "..", "public", "upload", year, month, day)
+    console.log("dir is ",path.join(__dirname));
+    fs.mkdirSync(uploadPath, {recursive: true})
+    return path.join("public", "upload", year, month, day)
+}
+
+
+function createLink(fileAddress,req){
+    return  fileAddress? (req.protocol + "://" + req.get("host")  + "/"+ (fileAddress.replace(/[\\\\]/gm, "/"))) : undefined
+}
 
 
 module.exports = {
@@ -101,7 +118,9 @@ module.exports = {
     SignAccessToken,
     SignRefreshToken,
     VerifyRefreshToken,
-    HashString
+    HashString,
+    createUploadPath,
+    createLink
 }
 
 
