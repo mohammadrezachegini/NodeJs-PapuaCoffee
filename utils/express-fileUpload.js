@@ -6,7 +6,7 @@ const uploadFile = async (req,res,next) => {
     try {
         // fileupload();
         console.log("ReQ FILE IS " + req.files.image);
-        if(req.file || Object.keys(req.files).length == 0) throw {status : 400, message: "please send the profile picture for project"}
+        if(req.file || Object.keys(req.files).length == 0) throw {status : 400, message: "please upload the profile picture for coffee"}
         let image = req.files.image
         console.log("image in upload file is   " + image);
         let type = path.extname(image.name);

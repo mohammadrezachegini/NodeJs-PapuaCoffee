@@ -1,4 +1,4 @@
-const {HashString} = require('../../../../../utils/function')
+const {HashString, deleteAccessToken, deleteRefreshToken} = require('../../../../../utils/function')
 const {UserModel} = require('../../../../models/user')
 const {SignAccessToken, SignRefreshToken} = require('../../../../../utils/function')
 const bcrypt = require("bcrypt");
@@ -48,6 +48,22 @@ class AuthControllers{
                 refreshToken,
                 user
               }
+            })
+          } catch (error) {
+            next(error)
+          }
+    }
+
+    async logout(req,res,next){
+        try {
+            const { accessToken, refreshToken, userId } = req.body;
+            const user = await UserModel.findOne({ email }, { accessToken: 0})
+            await deleteRefreshToken(refreshToken)
+
+            return res.status(200).json({
+              statusCode : 200,
+              success: true,
+              message: "successful logged out",
             })
           } catch (error) {
             next(error)

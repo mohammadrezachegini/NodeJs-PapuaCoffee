@@ -39,15 +39,15 @@ module.exports = class Application {
                     version: "2.0.0",
                     description: "The biggest store around the world",
                     contact: {
-                        name: "Reza Chegini",
+                        name: "Reza Chegini and Azin mobed",
                         url: "https://papuaCoffee.com",
-                        email: "mr.goodarzvand.chegini@gmail.com"
+                        email: "mr.goodarzvand.chegini@gmail.com - azinmobed@gmail.com"
                     }
 
                 },
                 servers: [
                     {
-                        url: "http://localhost:5000"
+                        url: "http://localhost:3000"
                     }
                 ]
 

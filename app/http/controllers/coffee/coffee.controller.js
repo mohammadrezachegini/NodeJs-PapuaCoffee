@@ -23,12 +23,12 @@ class CoffeeControllers{
             console.log("result IS ISI" + result);
             if(!result) throw {
                 status: 400,
-                message: "There is a problem to add a project"
+                message: "There is a problem to add a coffee"
             }
             return res.status(201).json({
                 status: 201,
                 success: true,
-                message: "Added Project successfully"
+                message: "Added Coffee successfully"
             })
         } catch (error) {
             next(error)
@@ -81,11 +81,11 @@ class CoffeeControllers{
             const coffeeID = req.params.id;
             const coffee  = await CoffeeModel.findOne({id: coffeeID})
             const deleteCoffeeResult = await CoffeeModel.deleteOne({_id : coffeeID})
-            if(deleteCoffeeResult.deletedCount == 0) throw {status: 400, message: "Project did not remove"}
+            if(deleteCoffeeResult.deletedCount == 0) throw {status: 400, message: "Coffee did not remove"}
             return res.status(200).json({
                 status: 200,
                 success: true,
-                message: "Project deleted successfully"
+                message: "Coffee deleted successfully"
             })
         } catch (error) {
             next(error)
@@ -113,7 +113,7 @@ class CoffeeControllers{
             return res.status(200).json({
                 status: 200,
                 success: true,
-                message: "updated project sucessfully"           
+                message: "updated coffee sucessfully"           
             })
         } catch (error) {
             next(error)
@@ -136,7 +136,7 @@ class CoffeeControllers{
             return res.status(200).json({
                 status: 200,
                 success: true,
-                message: "updated project successfully"           
+                message: "updated coffee successfully"           
             })
         } catch (error) {
             next(error)

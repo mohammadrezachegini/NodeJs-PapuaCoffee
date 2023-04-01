@@ -26,8 +26,7 @@ function SignAccessToken(userId){
     return new Promise(async (resolve, reject)=> {
         const user = await  UserModel.findById(userId)
         const payload = {
-            mobile: user.mobile,
-            // userID: user._id
+            email: user.email,
         };
         const secret = ACCESS_TOKEN_SECRET_KEY;
         const options = {
@@ -44,12 +43,21 @@ function SignAccessToken(userId){
 
 
 
+function deleteRefreshToken(token){
+    return new Promise(async (resolve, reject)=> {
+        await redisClient.del(String(token))
+        console.log("deleted");
+    });
+    
+
+}
+
+
 function SignRefreshToken(userId){
     return new Promise(async (resolve, reject)=> {
         const user = await  UserModel.findById(userId)
         const payload = {
-            mobile: user.mobile
-            // userID: user._id
+            email: user.email
         };
         // const secret = REFRESH_TOKEN_SECRET_KEY;
         const options = {
@@ -61,6 +69,7 @@ function SignRefreshToken(userId){
                 reject(createError.InternalServerError("Internal server error"))
             }
             await redisClient.setEx(String(userId), 31536000, token)
+            
 
             resolve(token)
         })
@@ -115,6 +124,7 @@ function createLink(fileAddress,req){
 
 module.exports = {
     randomNumberGenerator,
+    deleteRefreshToken,
     SignAccessToken,
     SignRefreshToken,
     VerifyRefreshToken,

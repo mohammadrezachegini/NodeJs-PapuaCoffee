@@ -26,7 +26,7 @@ const {mongoIDValidator} = require("../../http/validations/public")
  *          description :  register user
  *          parameters:
  *          -   name: product_name
- *              description: First Name
+ *              description: Product Name
  *              in: formData
  *              required: true
  *              type: string  
@@ -41,7 +41,7 @@ const {mongoIDValidator} = require("../../http/validations/public")
  *              required: true
  *              type: string  
  *          -   name: image
- *              description: Password
+ *              description: image
  *              in: formData
  *              required: true
  *              type: file         
@@ -57,8 +57,68 @@ const {mongoIDValidator} = require("../../http/validations/public")
 */
 
 router.post("/create", fileupload(),uploadFile, CoffeeController.createCoffee)
+/**
+ * @swagger
+ *  /coffee/list:
+ *      get:
+ *          summary: get All coffees
+ *          tags: [Coffees] 
+ *          description :  get All coffees
+ *                
+ *          responses:
+ *              201:
+ *                  description : success
+ *              400:
+ *                  description: Bad Request
+ *              401:
+ *                  description: Unauthorization
+ *              500:
+ *                  description: internal Server Error
+*/
 router.get("/list", CoffeeController.getAllCoffee)
+/**
+ * @swagger
+ *  /coffee/{id}:
+ *      get:
+ *          summary: get coffee by id
+ *          tags: [Coffees] 
+ *          description :  get coffee by id
+ *          parameters:
+ *          - in: path
+ *            name: id
+ *            required: true
+ *            type: string  
+ *          responses:
+ *              201:
+ *                  description : success
+ *              400:
+ *                  description: Bad Request
+ *              401:
+ *                  description: Unauthorization
+ *              500:
+ *                  description: internal Server Error
+*/
 router.get("/:id", mongoIDValidator(), CoffeeController.getCoffeeById)
+
+/**
+ * @swagger
+ * /coffee/remove/{id}:
+ *  delete:
+ *      description: Delete coffee by id
+ *      tags: [Coffees] 
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: string
+ *          required: true
+ *          description: string id of user to delete
+ *      responses:
+ *          200:
+ *              description: User that was deleted
+ */
+
+
 router.delete("/remove/:id", mongoIDValidator(), CoffeeController.removeCoffee)
 
 
@@ -70,51 +130,14 @@ router.delete("/remove/:id", mongoIDValidator(), CoffeeController.removeCoffee)
  *      
 */
 
-// /**
-//  * @swagger
-//  *  /coffee/edit/:id:
-//  *      put:
-//  *          summary: update user
-//  *          tags: [Coffees] 
-//  *          description :  register user
-//  *          parameters:
-//  *          -   name: product_name
-//  *              description: First Name
-//  *              in: formData
-//  *              required: true
-//  *              type: string  
-//  *          -   name: description
-//  *              description: description
-//  *              in: formData
-//  *              required: true
-//  *              type: string  
-//  *          -   name: price
-//  *              description: price
-//  *              in: formData
-//  *              required: true
-//  *              type: string  
-//  *          -   name: image
-//  *              description: image
-//  *              in: formData
-//  *              required: true
-//  *              type: file         
-//  *          responses:
-//  *              201:
-//  *                  description : success
-//  *              400:
-//  *                  description: Bad Request
-//  *              401:
-//  *                  description: Unauthorization
-//  *              500:
-//  *                  description: internal Server Error
-// */
 
 
 /**
  * @swagger
  * /coffee/edit/{id}:
  *   put:
- *     summary: Update a user by ID
+ *     summary: Update a coffee by ID
+ *     tags: [Coffees] 
  *     description: Update a user's name and email address by their ID.
  *     parameters:
  *       - in: path
@@ -149,7 +172,8 @@ router.put("/edit/:id", CoffeeController.updateCoffee)
  * @swagger
  * /coffee/edit-coffeeImage/{id}:
  *   patch:
- *     summary: Update a user by ID
+ *     summary: Update a coffee image by ID
+ *     tags: [Coffees] 
  *     description: Update a user's name and email address by their ID.
  *     parameters:
  *       - in: path

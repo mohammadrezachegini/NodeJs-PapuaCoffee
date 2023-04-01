@@ -108,6 +108,37 @@ router.post("/login",authController.login)
 
 // router.post("/refresh-token",authController.refreshToken)
 
+
+
+
+
+/**
+ * @swagger
+ *  /user/logout:
+ *      post:
+ *          summary: logout
+ *          tags: [User-Authentication] 
+ *          description :  logout
+ *          parameters:
+ *          -   name: refreshToken
+ *              description: Enter the refreshToken
+ *              in: formData
+ *              required: true
+ *              type: string         
+ *          responses:
+ *              201:
+ *                  description : success
+ *              400:
+ *                  description: Bad Request
+ *              401:
+ *                  description: Unauthorization
+ *              500:
+ *                  description: internal Server Error
+*/
+
+router.post("/logout",authController.logout)
+
+
 module.exports = {
     userAuthRoutes: router
 }
