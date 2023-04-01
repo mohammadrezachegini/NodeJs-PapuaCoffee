@@ -1,8 +1,11 @@
 const redisDB = require('redis');
-const redisClient = redisDB.createClient({
-    host: 'rediss://red-cgkbkukeoogkndi81gsg:34RpvkV6tj1Rc3s48qN25TVbYEgUwqqF@oregon-redis.render.com',
-    port: 6379
-  });
+const redisClient = redisDB.createClient({{
+    password: 'a19941994M@@',
+    socket: {
+        host: 'redis-13106.c61.us-east-1-3.ec2.cloud.redislabs.com',
+        port: 13106
+    }
+});
 redisClient.connect();
 redisClient.on('connect', () => {console.log("connecting to redis");});
 redisClient.on('ready', () => {console.log("connected to redis and ready to use");});
