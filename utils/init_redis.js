@@ -1,7 +1,7 @@
 const redisDB = require('redis');
 const redisClient = redisDB.createClient({
-    host: 'redis://red-cgkbkukeoogkndi81gsg',
-    port: '6379'
+    host: 'rediss://red-cgkbkukeoogkndi81gsg:34RpvkV6tj1Rc3s48qN25TVbYEgUwqqF@oregon-redis.render.com',
+    port: 6379
   });
 redisClient.connect();
 redisClient.on('connect', () => {console.log("connecting to redis");});
