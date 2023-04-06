@@ -124,7 +124,12 @@ router.post("/login",authController.login)
  *              description: Enter the refreshToken
  *              in: formData
  *              required: true
- *              type: string         
+ *              type: string
+ *          -   name: userId
+ *              description: Enter the userId
+ *              in: formData
+ *              required: true
+ *              type: string           
  *          responses:
  *              201:
  *                  description : success

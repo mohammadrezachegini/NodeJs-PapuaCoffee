@@ -5,7 +5,6 @@ const createError = require("http-errors")
 const { reject } = require("bcrypt/promises")
 const { UserModel } = require("../app/models/user")
 const { SECRET_KEY, ACCESS_TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY } = require("./constants")
-const redisClient = require("./init_redis")
 const path = require("path")
 const fs = require("fs")
 
@@ -43,14 +42,6 @@ function SignAccessToken(userId){
 
 
 
-function deleteRefreshToken(token){
-    return new Promise(async (resolve, reject)=> {
-        await redisClient.del(String(token))
-        console.log("deleted");
-    });
-    
-
-}
 
 
 function SignRefreshToken(userId){
@@ -68,7 +59,6 @@ function SignRefreshToken(userId){
             if (err) {
                 reject(createError.InternalServerError("Internal server error"))
             }
-            await redisClient.setEx(String(userId), 31536000, token)
             
 
             resolve(token)
@@ -78,31 +68,6 @@ function SignRefreshToken(userId){
 }
 
 
-function VerifyRefreshToken(token){
-
-        return new Promise((resolve,reject)=> {
-            jwt.verify(token, REFRESH_TOKEN_SECRET_KEY, async  (err, payload) => {
-                if(err) reject(createError.Unauthorized("Please Log in into your account"))
-                const {mobile} = payload || {};
-                const user = await UserModel.findOne({mobile}, {otp:0 , password:0 })
-                if(!user) reject(createError.Unauthorized("Username not found"))
-                
-                const refreshToken = await redisClient.get(user._id)
-
-                if(token === refreshToken){
-                    
-                    return resolve(mobile)
-                }
-
-                reject(createError.Unauthorized("Your tried to Login fir second time is  failed"))
-
-                
-                // req.user = user;
-                // console.log(req.user);
-                // return next()
-            }) 
-        })
-}
 
 
 function createUploadPath(){
@@ -124,10 +89,8 @@ function createLink(fileAddress,req){
 
 module.exports = {
     randomNumberGenerator,
-    deleteRefreshToken,
     SignAccessToken,
     SignRefreshToken,
-    VerifyRefreshToken,
     HashString,
     createUploadPath,
     createLink

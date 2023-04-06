@@ -23,7 +23,6 @@ module.exports = class Application {
         this.createServer();
         this.createRoutes();
         this.errorHandling();
-        this.InitRedis();
     }
 
     configApplication(){
@@ -85,9 +84,6 @@ module.exports = class Application {
         })
     }
 
-    InitRedis(){
-        require("../utils/init_redis")
-    }
 
 
     createRoutes(){

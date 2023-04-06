@@ -34,19 +34,33 @@ class AuthControllers{
             if(!user) throw {status: 401, message: "Email or password is wrong"}
             const compareResult = bcrypt.compareSync(password, user.password)
             if(!compareResult) throw {status: 401, message: "Email or password is wrong"}
+            // const data = {...req.body}
 
             const accessToken = await SignAccessToken(user._id)
+            // console.log(accessToken);
             const refreshToken = await SignRefreshToken(user._id);
-            console.log(accessToken);
-            console.log(refreshToken);
-            return res.status(200).json({
-              statusCode : 200,
-              success: true,
-              message: "successful logged in",
-              data: {
-                accessToken,
-                refreshToken,
-                user
+            
+            await UserModel.findOne({ _id: user._id  })
+            .then(async (users) => {
+              if(users.refreshToken === null) {
+                await UserModel.findOneAndUpdate({ _id: user._id }, { refreshToken: refreshToken }, { new: true })
+                return res.status(200).json({
+                    statusCode : 200,
+                    success: true,
+                    message: "successful logged in",
+                    data: {
+                          user
+                    }
+                  })
+              }
+              else{
+                return res.status(401).json({
+                    statusCode : 401,
+                    success: false,
+                    message: "YOu are already logged in",
+                    user
+                    
+                  })
               }
             })
           } catch (error) {
@@ -56,14 +70,25 @@ class AuthControllers{
 
     async logout(req,res,next){
         try {
-            const { accessToken, refreshToken, userId } = req.body;
-            const user = await UserModel.findOne({ email }, { accessToken: 0})
-            await deleteRefreshToken(refreshToken)
-
+            const { refreshToken,userId } = req.body;
+            deleteRefreshToken(refreshToken)
+            console.log(req.body);
+            
+            const user = await UserModel.findOne({ userId })
+            // 
+            // console.log("done");
+            await UserModel.findOneAndUpdate({ _id: user._id  })
+            .then(user => {
+              user.refreshToken = null;
+              return user.save();
+            })
+            // const user = await UserModel.findOne({ userId }, { accessToken: 0})
+            // await UserModel.findOneAndUpdate({ _id: user._id }, { accessToken: "", refreshToken: "null" })
             return res.status(200).json({
               statusCode : 200,
               success: true,
               message: "successful logged out",
+              user
             })
           } catch (error) {
             next(error)
