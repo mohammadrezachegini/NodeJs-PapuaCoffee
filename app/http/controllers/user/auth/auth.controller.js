@@ -36,22 +36,25 @@ class AuthControllers{
             if(!compareResult) throw {status: 401, message: "Email or password is wrong"}
             // const data = {...req.body}
 
-            const accessToken = await SignAccessToken(user._id)
-            // console.log(accessToken);
-            const refreshToken = await SignRefreshToken(user._id);
+            
             
             await UserModel.findOne({ _id: user._id  })
             .then(async (users) => {
-              if(users.refreshToken === null) {
-                await UserModel.findOneAndUpdate({ _id: user._id }, { refreshToken: refreshToken }, { new: true })
+              if(users.refreshToken == "0") {
+                const refreshToken = await SignRefreshToken(users._id);
+                users.refreshToken = refreshToken;
+                users.save();
+                // await UserModel.findOneAndUpdate({ _id: users._id }, { refreshToken:refreshToken }, { new: true })
+                // console.log("USEEEEEEEEEEEEEEEEEEEERS " + users);
                 return res.status(200).json({
-                    statusCode : 200,
-                    success: true,
-                    message: "successful logged in",
-                    data: {
-                          user
-                    }
-                  })
+                  statusCode : 200,
+                  success: true,
+                  message: "successful logged in",
+                  data: {
+                    refreshToken,
+                    users
+                  }
+                })
               }
               else{
                 return res.status(401).json({

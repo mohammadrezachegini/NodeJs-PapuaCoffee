@@ -64,7 +64,7 @@ class CoffeeControllers{
         try {
             // const product_name = req.user.product_name;
             const coffeeID = req.params.id;
-            const coffee  = await CoffeeModel.findOne({id: coffeeID})
+            const coffee  = await CoffeeModel.findOne({_id: coffeeID})
             coffee.image = createLink(coffee.image,req)
             return res.status(200).json({
                 status: 200,
