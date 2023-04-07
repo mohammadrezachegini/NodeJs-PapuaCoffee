@@ -37,15 +37,13 @@ class AuthControllers{
             // const data = {...req.body}
 
             
-            
+            const refreshToken = await SignRefreshToken(user._id);
             await UserModel.findOne({ _id: user._id  })
             .then(async (users) => {
-              if(users.refreshToken == "0") {
-                const refreshToken = await SignRefreshToken(users._id);
+              if(users.refreshToken === "0") {
+                
                 users.refreshToken = refreshToken;
                 users.save();
-                // await UserModel.findOneAndUpdate({ _id: users._id }, { refreshToken:refreshToken }, { new: true })
-                // console.log("USEEEEEEEEEEEEEEEEEEEERS " + users);
                 return res.status(200).json({
                   statusCode : 200,
                   success: true,
@@ -73,26 +71,32 @@ class AuthControllers{
 
     async logout(req,res,next){
         try {
-            const { refreshToken,userId } = req.body;
+            const { userId } = req.body;
             // deleteRefreshToken(refreshToken)
             console.log(req.body);
-            
             const user = await UserModel.findOne({ userId })
+            console.log("LOGOUT USERRRRRRR ID " + userId );
+            console.log("LOGOUT USERRRRRRR " + user );
+            // const user = await UserModel.findOne({ userId })
             // 
             // console.log("done");
-            await UserModel.findOneAndUpdate({ _id: user._id  })
-            .then(user => {
-              user.refreshToken = "0";
-              return user.save();
+            // await UserModel.findOne({ user._id  })
+            await UserModel.findOneAndUpdate({ _id: userId }, { refreshToken: "0" }, { new: true })
+            .then(async (users) => {
+              return res.status(200).json({
+                statusCode : 200,
+                success: true,
+                message: "successful logged out",
+                data: {
+                  // refreshToken,
+                  users
+                }
+              })
             })
+            
             // const user = await UserModel.findOne({ userId }, { accessToken: 0})
             // await UserModel.findOneAndUpdate({ _id: user._id }, { accessToken: "", refreshToken: "null" })
-            return res.status(200).json({
-              statusCode : 200,
-              success: true,
-              message: "successful logged out",
-              user
-            })
+            
           } catch (error) {
             next(error)
           }
