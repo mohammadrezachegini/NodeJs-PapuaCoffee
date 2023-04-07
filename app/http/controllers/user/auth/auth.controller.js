@@ -74,7 +74,7 @@ class AuthControllers{
     async logout(req,res,next){
         try {
             const { refreshToken,userId } = req.body;
-            deleteRefreshToken(refreshToken)
+            // deleteRefreshToken(refreshToken)
             console.log(req.body);
             
             const user = await UserModel.findOne({ userId })
@@ -82,7 +82,7 @@ class AuthControllers{
             // console.log("done");
             await UserModel.findOneAndUpdate({ _id: user._id  })
             .then(user => {
-              user.refreshToken = null;
+              user.refreshToken = "0";
               return user.save();
             })
             // const user = await UserModel.findOne({ userId }, { accessToken: 0})
